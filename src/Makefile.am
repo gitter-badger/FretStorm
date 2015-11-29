@@ -14,7 +14,8 @@ else
 endif
 
 fretstorm_LDADD  = \
-        $(top_builddir)/src/scanner/libscanner.a    \
+        $(top_builddir)/midifile/lib/libmidifile.a   \
+        scanner/libscanner.a        \
         $(AM_LDFLAGS)				\
 	    $(BOOST_SYSTEM_LIB) 		\
 	    $(BOOST_FILESYSTEM_LIB)

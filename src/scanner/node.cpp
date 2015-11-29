@@ -8,9 +8,6 @@ using namespace std;
 #include <boost/filesystem.hpp>
 using namespace boost;
 
-void test(int a ) {
-
-}
 
 bool node::is_a_directory() {
     return exists(node_path) && is_directory(node_path);
@@ -22,9 +19,14 @@ bool node::contains_song_ini() {
         sub_song_ini = node_path / "song.ini";
 
     if (exists(node_path) && is_directory(node_path)) {
-        return exists(node_path/"song.ini") && is_regular_file(node_path/"song.ini")
-            || exists(node_path/"Song.ini") && is_regular_file(node_path/"Song.ini");
+        return (exists(node_path/"song.ini") && is_regular_file(node_path/"song.ini"))
+            || (exists(node_path/"Song.ini") && is_regular_file(node_path/"Song.ini"));
     }
+    return false;
+}
+
+bool node::is_a_trackdir() {
+    return contains_song_ini();
 }
 
 void directory::list_dir(int indent, bool recursive) {
@@ -46,7 +48,7 @@ void directory::list_dir(int indent, bool recursive) {
             if (is_directory(*it)) {
                 directory this_is_a_dir(*it);
 
-                if (this_is_a_dir.contains_song_ini()) {
+                if (this_is_a_dir.is_a_trackdir()) {
                     cout << " : Musique" << endl;
                 }else {
                     cout <<"/" << endl;

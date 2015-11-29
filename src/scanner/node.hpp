@@ -17,7 +17,9 @@ public:
     };
 
     bool is_a_directory();
+
     bool contains_song_ini();
+    bool is_a_trackdir();
 
    ~node(){};
 protected:

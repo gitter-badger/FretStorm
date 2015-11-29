@@ -54,6 +54,9 @@ AC_CONFIG_FILES(Makefile
                 src/Makefile
                 src/scanner/Makefile
                 )
+
+AC_CONFIG_SUBDIRS([hand])
+
 AC_OUTPUT
 
 
