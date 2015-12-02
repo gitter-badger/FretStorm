@@ -2,7 +2,7 @@
 # The libraries to build
 noinst_LIBRARIES = libmidi.a
 
-AM_CXXFLAGS  =-I$(top_srcdir)/midifile/src-library
+AM_CXXFLAGS  =-I$(top_srcdir)/midifile/include
 
 if DEBUG
   AM_CXXFLAGS += -Wall -O3 -g
