@@ -2,7 +2,7 @@
 #include <iostream>
 
 void printMidiFile(MidiFile& midifile) {
-    midifile.deltaTicks();
+    midifile.absoluteTicks();
     printMidiHeader(midifile);
     int trackcount = midifile.getTrackCount();
     for (int i=0; i<trackcount; i++) {

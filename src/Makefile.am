@@ -5,9 +5,12 @@ bin_PROGRAMS = fretstorm
 
 fretstorm_SOURCES = fretstorm.cpp   \
             scanner/node.cpp        \
-            midi/midi.cpp
+            midi/midi.cpp           \
+            midi/event.cpp          \
+            midi/song.cpp           \
+            midi/track.cpp
 
-AM_CXXFLAGS=-Wall -O3                   \
+AM_CXXFLAGS=-Wall -O3 -g                \
             $(GLIB_CXXFLAGS)            \
             $(SQLITE3_CXXFLAGS)         \
     -I$(top_srcdir)/src/midi            \
@@ -24,5 +27,4 @@ fretstorm_LDADD  = \
         $(AM_LDFLAGS)               \
         $(BOOST_SYSTEM_LIB)         \
         $(BOOST_FILESYSTEM_LIB)     \
-        $(SQLITE_LIBS)              \
-        $(GLIB_LIBS)
+        $(SQLITE_LIBS)
