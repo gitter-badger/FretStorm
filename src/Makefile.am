@@ -4,13 +4,15 @@ AUTOMAKE_OPTIONS = subdir-objects
 bin_PROGRAMS = fretstorm
 
 fretstorm_SOURCES = fretstorm.cpp   \
-            scanner/node.cpp
+            scanner/node.cpp        \
+            midi/midi.cpp
 
 AM_CXXFLAGS=-Wall -O3                   \
             $(GLIB_CXXFLAGS)            \
             $(SQLITE3_CXXFLAGS)         \
     -I$(top_srcdir)/src/midi            \
     -I$(top_srcdir)/src/scanner         \
+    -I$(top_builddir)/midifile/include  \
     -DPACKAGE_SRC_DIR=\""$(srcdir)"\"
 
 if DEBUG
