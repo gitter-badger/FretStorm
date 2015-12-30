@@ -7,10 +7,10 @@ Installation
 -----
 On Linux with Autotools.
 
-	$ git clone https://github.com/Salamandar/FoF- && cd FoF-
+	$ git clone https://github.com/Salamandar/FretStorm && cd FretStorm
 	$ autoreconf -vi && ./configure && make
 
 Execution
 ----
-	./src/FoF++
+	./src/fretstorm
 
