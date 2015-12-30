@@ -8,7 +8,12 @@ fretstorm_SOURCES = fretstorm.cpp   \
             midi/midi.cpp           \
             midi/event.cpp          \
             midi/song.cpp           \
-            midi/track.cpp
+            midi/track.cpp          \
+            midi/midifile/Binasc.cpp        \
+            midi/midifile/MidiEvent.cpp     \
+            midi/midifile/MidiEventList.cpp \
+            midi/midifile/MidiFile.cpp      \
+            midi/midifile/MidiMessage.cpp
 
 AM_CXXFLAGS=-Wall -O3 -g                \
             $(GLIB_CXXFLAGS)            \
@@ -23,7 +28,6 @@ if DEBUG
 endif
 
 fretstorm_LDADD  = \
-        $(top_builddir)/midifile/lib/libmidifile.a   \
         $(AM_LDFLAGS)               \
         $(BOOST_SYSTEM_LIB)         \
         $(BOOST_FILESYSTEM_LIB)     \
