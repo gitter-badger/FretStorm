@@ -28,7 +28,7 @@ AC_CONFIG_MACRO_DIRS([m4])
 
 AM_INIT_AUTOMAKE([1.11])
 
-AM_SILENT_RULES([no])
+AM_SILENT_RULES([yes])
 
 dnl ================================================================
 dnl Check for Programs
