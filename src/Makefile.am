@@ -15,7 +15,7 @@ fretstorm_SOURCES = fretstorm.cpp   \
             midi/midifile/MidiFile.cpp      \
             midi/midifile/MidiMessage.cpp
 
-AM_CXXFLAGS=-Wall -O3 -g                \
+AM_CXXFLAGS=-Wall -O3 -g -std=gnu++11   \
             $(GLIB_CXXFLAGS)            \
             $(SQLITE3_CXXFLAGS)         \
     -I$(top_srcdir)/src/midi            \

@@ -28,7 +28,7 @@ AC_CONFIG_MACRO_DIRS([m4])
 
 AM_INIT_AUTOMAKE([1.11])
 
-AM_SILENT_RULES([yes])
+AM_SILENT_RULES([no])
 
 dnl ================================================================
 dnl Check for Programs
@@ -40,9 +40,7 @@ dnl C++11 support
 dnl ================================================================
 
 AC_PROG_CXX
-CXX11_CHECK_CXX11_SUPPORT
 AX_CXX_COMPILE_STDCXX_11
-
 
 
 dnl ================================================================
