@@ -19,6 +19,7 @@ AM_CXXFLAGS=-Wall -O3 -g                \
             $(GLIB_CXXFLAGS)            \
             $(SQLITE3_CXXFLAGS)         \
     -I$(top_srcdir)/src/midi            \
+    -I$(top_srcdir)/src/midi/midifile   \
     -I$(top_srcdir)/src/scanner         \
     -I$(top_builddir)/midifile/include  \
     -DPACKAGE_SRC_DIR=\""$(srcdir)"\"
