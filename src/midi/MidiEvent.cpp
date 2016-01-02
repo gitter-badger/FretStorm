@@ -7,40 +7,9 @@
 using namespace std;
 
 
-MidiEvent::MidiEvent() {
-/*
-    int commandbyte = event[0];
+MidiEvent::MidiEvent() { }
 
-    switch (commandbyte) {
-    case 0x90:
-        eventType = NOTE_ON;
-        note = (e_notes) event[1];
-        break;
-
-    case 0x80:
-        eventType = NOTE_OFF;
-        note = (e_notes) event[1];
-        break;
-
-    case 0xff:
-        eventType = META;
-        setMetaFromEvent();
-        break;
-
-
-    default:
-        cout<< "Unknown commandbyte : "
-            << event[0]
-            << endl;
-        break;
-    }
-    */
-}
-
-MidiEvent::MidiEvent(MidiFile&, MidiTrack&) {
-
-}
-
+MidiEvent::MidiEvent(MidiFile&, MidiTrack&) { }
 
 
 int MidiEvent::read(istream& input, int& rwErrorFlag, const MidiEvent* lastEvent) {
@@ -63,9 +32,6 @@ int MidiEvent::read(istream& input, int& rwErrorFlag, const MidiEvent* lastEvent
         eventType   = (e_event_type)input.get();
         channel     = (eventType & 0x0f);
     }
-
-
-    //cout << "eventtype 0x" <<hex << eventType;
 
     switch (eventType & 0xf0) {
     case NOTE_OFF:      // note off           (2 more bytes)
@@ -94,30 +60,27 @@ int MidiEvent::read(istream& input, int& rwErrorFlag, const MidiEvent* lastEvent
     case META_EVENT:
         meta_eventType = BinUtils::readByte(input);
         meta_length    = BinUtils::readVLV(input, &countsize);
-    //    cout<< " metaType 0x"   << hex << meta_eventType
-    //        << " size "         << dec << meta_length       << " ";
 
         // TODO replace here
-        for (int i=0; i<meta_length; i++) {
-            //cout <<
+        for (int i=0; i<meta_length; i++)
             text +=(char)BinUtils::readByte(input);
-        }
+
         switch (meta_eventType) {
-        case 0x00:      // Sequence number
-        case 0x01:      // Text Event
-        case 0x02:      // Copyright Notice
-        case 0x03:      // Sequence or track name
-        case 0x04:      // Instrument name
-        case 0x05:      // Lyric text
-        case 0x06:      // Marker text
-        case 0x07:      // Cue point
-        case 0x20:      // MIDI channel prefix assignment
-        case 0x2F:      // End of track
-        case 0x51:      // Tempo Setting
-        case 0x54:      // SMPTE offset
-        case 0x58:      // Time signature
-        case 0x59:      // Key signature
-        case 0x7F:      // Sequencer specific event
+        case META_SEQUENCE_NUMBER:  // Sequence number
+        case META_TEXT_EVENT:       // Text Event
+        case META_COPYRIGHT:        // Copyright Notice
+        case META_TRACK_NAME:       // Sequence or track name
+        case META_INSTRUMENT_NAME:  // Instrument name
+        case META_LYRIC_TEXT:       // Lyric text
+        case META_MARKER_TEXT:      // Marker text
+        case META_CUE_POINT:        // Cue point
+        case META_CHANN_PREFIX:     // MIDI channel prefix assignment
+        case META_END_OF_TRACK:     // End of track
+        case META_TEMPO_SET:        // Tempo Setting
+        case META_SMPTE_OFFSET:     // SMPTE offset
+        case META_TIME_SIG:         // Time signature
+        case META_KEY_SIG:          // Key signature
+        case META_SEQ_SPEC_EVENT:   // Sequencer specific event
             break;
         default:
             cout << "Unknown meta type 0x" << meta_eventType << endl;
@@ -129,7 +92,6 @@ int MidiEvent::read(istream& input, int& rwErrorFlag, const MidiEvent* lastEvent
         cout << "Command byte was " << (int)eventType << endl;
         return 0;
     }
-    //cout << endl;
 
     return 0;
 }

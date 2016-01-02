@@ -7,7 +7,6 @@
 #include "MidiFile.h"
 #include "BinUtils.h"
 
-
 using namespace std;
 
 MidiFile::MidiFile(void)
@@ -91,7 +90,6 @@ int MidiFile::read(istream& input) {
     trackCount = trackCountInHeader;
 
     for (int i = 0; i < trackCountInHeader; ++i) {
-    //    cout << "track" << endl;
         MidiTrack* midiTrack = new MidiTrack(*this);
 
         if (midiTrack->read(input, rwErrorFlag))

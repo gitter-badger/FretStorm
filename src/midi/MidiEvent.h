@@ -19,16 +19,28 @@ enum e_event_type {
     PROGCHANGE  =   0xC0,
     CHANNPRESS  =   0xD0,
     PITCHWHEEL  =   0xE0,
-    META_EVENT  =   0xF0,
-
-    META_TEXT           = 201,
-    META_TRACKNAME      = 203,
-    META_TEMPO_SET      = 281,
-    META_TIME_SIG       = 288,
-    META_END_OF_TRACK   = 247
+    META_EVENT  =   0xF0
 };
 
-#define META_END_OF_TRACK 0x2f
+enum e_meta_event_type {
+    META_SEQUENCE_NUMBER    = 0x00,      // Sequence number
+    META_TEXT_EVENT         = 0x01,      // Text Event
+    META_COPYRIGHT          = 0x02,      // Copyright Notice
+    META_TRACK_NAME         = 0x03,      // Sequence or track name
+    META_INSTRUMENT_NAME    = 0x04,      // Instrument name
+    META_LYRIC_TEXT         = 0x05,      // Lyric text
+    META_MARKER_TEXT        = 0x06,      // Marker text
+    META_CUE_POINT          = 0x07,      // Cue point
+    META_CHANN_PREFIX       = 0x20,      // MIDI channel prefix assignment
+    META_END_OF_TRACK       = 0x2F,      // End of track
+    META_TEMPO_SET          = 0x51,      // Tempo Setting
+    META_SMPTE_OFFSET       = 0x54,      // SMPTE offset
+    META_TIME_SIG           = 0x58,      // Time signature
+    META_KEY_SIG            = 0x59,      // Key signature
+    META_SEQ_SPEC_EVENT     = 0x7F       // Sequencer specific event
+
+};
+
 
 enum e_notes {
     Easy_A  = 60,
@@ -75,7 +87,7 @@ public:
 
 protected:
     int     eventByteLength;
-    ulong   deltaTicks;
+    long    deltaTicks;
 
     e_event_type eventType;
     int          channel;

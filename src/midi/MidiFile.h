@@ -28,7 +28,7 @@ public:
     MidiFile                    (const string* aFile);
     MidiFile                    (const char* filename);
     MidiFile                    (istream& input);
-    ~MidiFile                   ();
+   ~MidiFile                    ();
 
     static string getName();
     void print();

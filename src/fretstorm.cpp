@@ -40,8 +40,13 @@ int main(int argc, char const *argv[]) {
         << root_dir.count_dir_musics(true)
         << endl;
 
-    MidiFile midifile(&filename);
-    midifile.print();
+    for (int i = 0; i < 100; ++i)
+    {
+        cout << i << endl;
+        MidiFile midifile(&filename);
+        /* code */
+    }
+    //midifile.print();
 //    MidiSong midiSong(filename);
 //    midiSong.print();
 
