@@ -5,17 +5,18 @@
 #include <MidiFile.h>
 
 #include "scanner/node.hpp"
-#include "midi/midi.h"
-#include "midi/song.h"
+#include "midi/MidiFile.h"
+#include "midi/BinUtils.h"
 
 using namespace boost;
 using namespace std;
 
 #define PATH "MusicExamples"
-//#define MIDIFILE "/home/salamandar/FoF/songs/Odino Hero/Tier 8/08.3 Seventh Wonder - Alley Cat/notes.mid"
+#define MIDIFILE "/home/salamandar/FoF/songs/Odino Hero/Tier 8/08.3 Seventh Wonder - Alley Cat/notes.mid"
 //#define MIDIFILE "MusicExamples/Kamelot - Nights of Arabia/notes_orig.mid"
-#define MIDIFILE "/home/salamandar/FoF/NewSongs/Kamelot - Center of the universe/notes.mid"
+//#define MIDIFILE "/home/salamandar/FoF/NewSongs/Kamelot - Center of the universe/notes.mid"
 string filename;
+
 
 int main(int argc, char const *argv[]) {
     if (argc != 2) {
@@ -39,13 +40,23 @@ int main(int argc, char const *argv[]) {
         << root_dir.count_dir_musics(true)
         << endl;
 
-    MidiFile midifile(filename);
-    MidiSong midiSong(filename);
+    MidiFile midifile(&filename);
+    midifile.print();
+//    MidiSong midiSong(filename);
+//    midiSong.print();
+
 //    printMidiFile(midifile);
-
-    midiSong.print();
-
-
+/*
+    uchar bytes[5];
+    BinUtils::writeVLV(bytes, 0x08000000);
+    BinUtils::printVLV(bytes);
+    uchar bytes2[5];
+    BinUtils::writeVLV(bytes2, 137);
+    BinUtils::printVLV(bytes2);
+    uchar bytes3[5];
+    BinUtils::writeVLV(bytes3, 0x00003FFF);
+    BinUtils::printVLV(bytes3);
+*/
 
     return 0;
 }

@@ -2,15 +2,15 @@
 #include <iostream>
 
 void printMidiFile(MidiFile& midifile) {
-    midifile.absoluteTicks();
-    printMidiHeader(midifile);
-    int trackcount = midifile.getTrackCount();
-    for (int i=0; i<trackcount; i++) {
-        printTrack(midifile, i);
-    }
+   // midifile.absoluteTicks();
+   // printMidiHeader(midifile);
+   // int trackcount = midifile.getTrackCount();
+   // for (int i=0; i<trackcount; i++) {
+    //    printTrack(midifile, i);
+   // }
 }
 
-
+/*
 
 //////////////////////////////
 //
@@ -304,3 +304,4 @@ void usage(const char* command) {
 
 
 
+*/
