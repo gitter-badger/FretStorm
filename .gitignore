@@ -36,3 +36,9 @@ stamp-h1
 *.gcda
 .dirstamp
 src/fretstorm
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+FretStorm
+cmake_install.cmake
