@@ -1,16 +1,21 @@
 FretStorm
 ============
 
-The awesome Frets On Fire, but a new software written in c++.
+This is a Frets On Fire clone, written in C++11.
+
 
 Installation
 -----
 On Linux with Autotools.
 
-	$ git clone https://github.com/Salamandar/FretStorm && cd FretStorm
+	$ git clone https://github.com/FretStorm/FretStorm && cd FretStorm
 	$ autoreconf -vi && ./configure && make
 
 Execution
 ----
-	./src/fretstorm
+	$ ./src/fretstorm - 
+    OR
+    $ ./src/fretstorm /the/path/to/a/file.mid
+
+
 
