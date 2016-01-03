@@ -12,8 +12,8 @@ using namespace boost;
 using namespace std;
 
 #define PATH "MusicExamples"
-#define MIDIFILE "/home/salamandar/FoF/songs/Odino Hero/Tier 8/08.3 Seventh Wonder - Alley Cat/notes.mid"
-//#define MIDIFILE "MusicExamples/Kamelot - Nights of Arabia/notes_orig.mid"
+//#define MIDIFILE "/home/salamandar/FoF/songs/Odino Hero/Tier 8/08.3 Seventh Wonder - Alley Cat/notes.mid"
+#define MIDIFILE "MusicExamples/notes.mid"
 //#define MIDIFILE "/home/salamandar/FoF/NewSongs/Kamelot - Center of the universe/notes.mid"
 string filename;
 
