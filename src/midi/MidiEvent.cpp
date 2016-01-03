@@ -58,6 +58,9 @@ int MidiEvent::read(istream& input, int& rwErrorFlag, const MidiEvent* lastEvent
         pitch_high  = BinUtils::readByte(input);
         break;
     case META_EVENT:
+        if ((eventType == 0xf0) || (eventType == 0xf7))
+            while (BinUtils::readByte(input) != 0xf7) {}
+
         meta_eventType = BinUtils::readByte(input);
         meta_length    = BinUtils::readVLV(input, &countsize);
 
@@ -96,41 +99,6 @@ int MidiEvent::read(istream& input, int& rwErrorFlag, const MidiEvent* lastEvent
     return 0;
 }
 
-/*
-        case 0x0f:                 // meta event
-            byte = BinUtils::readByte(input); // meta type
-            array.push_back(byte);
-
-            metai = BinUtils::readByte(input); // meta type
-            array.push_back(metai);
-            for (uchar j=0; j<metai; j++) {
-                byte = BinUtils::readByte(input); // meta type
-                array.push_back(byte);
-            }
-            break;
-            // The 0xf0 and 0xf7 meta commands deal with system-exclusive
-            // messages. 0xf0 is used to either start a message or to store
-            // a complete message.  The 0xf0 is part of the outgoing MIDI
-            // bytes.  The 0xf7 message is used to send arbitrary bytes,
-            // typically the middle or ends of system exclusive messages.  The
-            // 0xf7 byte at the start of the message is not part of the
-            // outgoing raw MIDI bytes, but is kept in the MidiFile message
-            // to indicate a raw MIDI byte message (typically a partial
-            // system exclusive message).
-        case 0x07:                // Raw bytes. 0xf7 is not part of the raw
-            // bytes, but are included to indicate
-            // that this is a raw byte message.
-        case 0x00:                // System Exclusive message
-                                  // (complete, or start of message).
-            int length = BinUtils::readVLV(input, NULL);
-            for (int i=0; i<length; i++) {
-                byte = BinUtils::readByte(input);
-                array.push_back(byte);
-            }
-            break;
-            // other "F" MIDI commands are not expected, but can be
-            // handled here if they exist.
-*/
 
 void MidiEvent::print(){
     cout<< "Time="<<tick<<", \t";
@@ -138,18 +106,18 @@ void MidiEvent::print(){
     switch (eventType & 0xF0) {
     case NOTE_ON:
         cout<< "NoteOn  "   << note
-            << "\t";
-        printNote(note);
+            << "\t"
+            << printNote(note);
         break;
     case NOTE_OFF:
         cout<< "NoteOff "   << note
-            << "\t";
-        printNote(note);
+            << "\t"
+            << printNote(note);
         break;
     case AFTERTOUCH:
-        cout<< "NoteOff "   << note
-            << "\t";
-        printNote(note);
+        cout<< "Aftertouch "<< note
+            << "\t"
+            << printNote(note);
         break;
     case CONTCHANGE:
         cout<< "Control Change " << controller << " to " << cont_value;
@@ -213,72 +181,33 @@ void MidiEvent::print(){
 }
 
 
-void MidiEvent::printNote(int note) {
+const string MidiEvent::printNote(int note) {
     switch (note) {
-    case 60:
-        cout << "Easy   A";
-        break;
-    case 61:
-        cout << "Easy   B";
-        break;
-    case 62:
-        cout << "Easy   C";
-        break;
-    case 63:
-        cout << "Easy   D";
-        break;
-    case 64:
-        cout << "Easy   E";
-        break;
-    case 72:
-        cout << "Medium A";
+    case 60:    return "Easy   A";
+    case 61:    return "Easy   B";
+    case 62:    return "Easy   C";
+    case 63:    return "Easy   D";
+    case 64:    return "Easy   E";
 
-        break;
-    case 73:
-        cout << "Medium B";
-        break;
-    case 74:
-        cout << "Medium C";
-        break;
-    case 75:
-        cout << "Medium D";
-        break;
-    case 76:
-        cout << "Medium E";
-        break;
-    case 84:
-        cout << "Hard   A";
-        break;
-    case 85:
-        cout << "Hard   B";
-        break;
-    case 86:
-        cout << "Hard   C";
-        break;
-    case 87:
-        cout << "Hard   D";
-        break;
-    case 88:
-        cout << "Hard   E";
-        break;
-    case 96:
-        cout << "Expert A";
-        break;
-    case 97:
-        cout << "Expert B";
-        break;
-    case 98:
-        cout << "Expert C";
-        break;
-    case 99:
-        cout << "Expert D";
-        break;
-    case 100:
-        cout << "Expert E";
-        break;
-    default:
-        cout << "ERROR, unknwon note";
-        break;
+    case 72:    return "Medium A";
+    case 73:    return "Medium B";
+    case 74:    return "Medium C";
+    case 75:    return "Medium D";
+    case 76:    return "Medium E";
+
+    case 84:    return "Hard   A";
+    case 85:    return "Hard   B";
+    case 86:    return "Hard   C";
+    case 87:    return "Hard   D";
+    case 88:    return "Hard   E";
+
+    case 96:    return "Expert A";
+    case 97:    return "Expert B";
+    case 98:    return "Expert C";
+    case 99:    return "Expert D";
+    case 100:   return "Expert E";
+
+    default:    return "ERROR, unknown note";
     }
 }
 

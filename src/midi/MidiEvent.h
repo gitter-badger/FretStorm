@@ -76,54 +76,46 @@ class MidiEvent {
 public:
     MidiEvent               ();
     MidiEvent               (MidiFile& file, MidiTrack& track);
-
     int     read            (istream& input, int& rwErrorFlag, const MidiEvent* lastEvent);
 
-    void    print           (void);
 
     int     getAbsTicks     (void);
     bool    isEndOfTrack    (void);
     int     extractMidiData (istream& input, vector<uchar>& array, uchar& runningCommand);
 
+    void    print           (void);
+    const string printNote  (int note);
+
 protected:
     int     eventByteLength;
     long    deltaTicks;
-
-    e_event_type eventType;
-    int          channel;
-
-    // Here, only one group is not NULL
-    e_notes note;
-    int     velocity;
-
-    int     meta_eventType;
-
-
-    int pressure;
-    int controller;
-    int cont_value;
-    int program;
-
-    int pitch_low;
-    int pitch_high;
-    int meta_length;
-
-    string  text;
-    int     tempo;
-    int     timeSig;
-
-
     int     tick;
     int     track;
     double  seconds;
 
-    void setMetaFromEvent();
-    void setTextFromEvent();
-    void setTempoFromEvent();
-    void setTimeSigFromEvent();
+    e_event_type eventType;
+    int          channel;
 
-    void printNote(int note);
+    // Notes or Aftertouch
+    e_notes note;
+    int     velocity;
+    int     pressure;
 
+
+    // Meta Events
+    int     meta_eventType;
+    int     meta_length;
+
+    int     controller;
+    int     cont_value;
+
+    int     program;
+
+    int     pitch_low, pitch_high;
+
+    string  text;
+    int     tempo;
+    int     timeSig;
 };
 
 

@@ -8,14 +8,6 @@
 using namespace std;
 
 
-BinUtils::BinUtils(void) {
-}
-
-
-BinUtils::~BinUtils() {
-    // do nothing
-}
-
 ///////////////////////////////
 //
 // BinUtils::*VLV -- Variable-Length Value from/to file
@@ -38,7 +30,6 @@ int BinUtils::readVLV(istream& infile, int* trackbytes) {
 
     return output;
 }
-
 
 int BinUtils::writeVLV(uchar bytes[VLV_MAX_SIZE], int number) {
     unsigned long value = (unsigned long)number;
@@ -64,28 +55,21 @@ int BinUtils::writeVLV(uchar bytes[VLV_MAX_SIZE], int number) {
     return length;
 }
 
-void BinUtils::printVLV(uchar bytes[VLV_MAX_SIZE]) {
+void BinUtils::printVLVHex(uchar bytes[VLV_MAX_SIZE]) {
+    int i = 0;
+    do {
+        cout << hex << ((int) bytes[i]) << " ";
+        i++;
+    } while ((i < VLV_MAX_SIZE) && (bytes[i-1] >> 7));
+}
+
+void BinUtils::printVLVBin(uchar bytes[VLV_MAX_SIZE]) {
     int i = 0;
     do {
         cout << hex << bitset<8>((int) bytes[i]) << " ";
         i++;
     } while ((i < VLV_MAX_SIZE) && (bytes[i-1] >> 7));
-    i = 0;
-    cout << endl;
-    do {
-        cout << hex << ((int) bytes[i]) << " ";
-        i++;
-    } while ((i < VLV_MAX_SIZE) && (bytes[i-1] >> 7));
-
-    cout << endl;
 }
-
-//Todo remove this
-//////////////////////////////
-//
-// getVlvSize -- return the number of bytes in the VLV format for the
-//    integer.
-//
 
 int getVlvSize(int value) {
     if (value < 0x80) {
@@ -102,7 +86,14 @@ int getVlvSize(int value) {
 }
 
 
-int BinUtils::checkFoundChar(char character, char expected, string* filename) {
+
+///////////////////////////////////////////////////////////////////////////
+//
+// Static functions:
+//
+
+
+int    BinUtils::checkFoundChar(char character, char expected, string* filename) {
     if (character == EOF) {
         cerr << "In file "      << filename << ": unexpected end of file." << endl;
         cerr << "Expecting '"   << expected << "', but found nothing." << endl;
@@ -116,22 +107,25 @@ int BinUtils::checkFoundChar(char character, char expected, string* filename) {
     return 0;
 }
 
-
-
-///////////////////////////////////////////////////////////////////////////
-//
-// Static functions:
-//
-
-
-//////////////////////////////
-//
-// BinUtils::readLittleEndian4Bytes -- Read four bytes which are in
-//      little-endian order (smallest byte is first).  Then flip
-//      the order of the bytes to create the return value.
-//
-
-ulong BinUtils::readLittleEndian4Bytes(istream& input) {
+uchar  BinUtils::readByte(istream& input) {
+    uchar buffer[1] = {0};
+    input.read((char*)buffer, 1);
+    if (input.eof()) {
+        cerr << "Error: unexpected end of file." << endl;
+        exit(1);
+    }
+    return buffer[0];
+}
+ushort BinUtils::readLittleEndian2Bytes(istream& input) {
+    uchar buffer[2] = {0};
+    input.read((char*)buffer, 2);
+    if (input.eof()) {
+        cerr << "Error: unexpected end of file." << endl;
+        exit(1);
+    }
+    return buffer[1] | (buffer[0] << 8);
+}
+ulong  BinUtils::readLittleEndian4Bytes(istream& input) {
     uchar buffer[4] = {0};
     input.read((char*)buffer, 4);
     if (input.eof()) {
@@ -142,49 +136,6 @@ ulong BinUtils::readLittleEndian4Bytes(istream& input) {
 }
 
 
-
-//////////////////////////////
-//
-// BinUtils::readLittleEndian2Bytes -- Read two bytes which are in
-//       little-endian order (smallest byte is first).  Then flip
-//       the order of the bytes to create the return value.
-//
-
-ushort BinUtils::readLittleEndian2Bytes(istream& input) {
-    uchar buffer[2] = {0};
-    input.read((char*)buffer, 2);
-    if (input.eof()) {
-        cerr << "Error: unexpected end of file." << endl;
-        exit(1);
-    }
-    return buffer[1] | (buffer[0] << 8);
-}
-
-
-
-//////////////////////////////
-//
-// BinUtils::readByte -- Read one byte from input stream.  Exit if there
-//     was an error.
-//
-
-uchar BinUtils::readByte(istream& input) {
-    uchar buffer[1] = {0};
-    input.read((char*)buffer, 1);
-    if (input.eof()) {
-        cerr << "Error: unexpected end of file." << endl;
-        exit(1);
-    }
-    return buffer[0];
-}
-
-
-
-//////////////////////////////
-//
-// BinUtils::writeLittleEndianUShort --
-//
-
 ostream& BinUtils::writeLittleEndianUShort(ostream& out, ushort value) {
     union { char bytes[2]; ushort us; } data;
     data.us = value;
@@ -192,14 +143,6 @@ ostream& BinUtils::writeLittleEndianUShort(ostream& out, ushort value) {
     out << data.bytes[1];
     return out;
 }
-
-
-
-//////////////////////////////
-//
-// BinUtils::writeBigEndianUShort --
-//
-
 ostream& BinUtils::writeBigEndianUShort(ostream& out, ushort value) {
     union { char bytes[2]; ushort us; } data;
     data.us = value;
@@ -208,13 +151,6 @@ ostream& BinUtils::writeBigEndianUShort(ostream& out, ushort value) {
     return out;
 }
 
-
-
-//////////////////////////////
-//
-// BinUtils::writeLittleEndianShort --
-//
-
 ostream& BinUtils::writeLittleEndianShort(ostream& out, short value) {
     union { char bytes[2]; short s; } data;
     data.s = value;
@@ -222,14 +158,6 @@ ostream& BinUtils::writeLittleEndianShort(ostream& out, short value) {
     out << data.bytes[1];
     return out;
 }
-
-
-
-//////////////////////////////
-//
-// BinUtils::writeBigEndianShort --
-//
-
 ostream& BinUtils::writeBigEndianShort(ostream& out, short value) {
     union { char bytes[2]; short s; } data;
     data.s = value;
@@ -237,13 +165,6 @@ ostream& BinUtils::writeBigEndianShort(ostream& out, short value) {
     out << data.bytes[0];
     return out;
 }
-
-
-
-//////////////////////////////
-//
-// BinUtils::writeLittleEndianULong --
-//
 
 ostream& BinUtils::writeLittleEndianULong(ostream& out, ulong value) {
     union { char bytes[4]; ulong ul; } data;
@@ -254,14 +175,6 @@ ostream& BinUtils::writeLittleEndianULong(ostream& out, ulong value) {
     out << data.bytes[3];
     return out;
 }
-
-
-
-//////////////////////////////
-//
-// BinUtils::writeBigEndianULong --
-//
-
 ostream& BinUtils::writeBigEndianULong(ostream& out, ulong value) {
     union { char bytes[4]; long ul; } data;
     data.ul = value;
@@ -272,13 +185,6 @@ ostream& BinUtils::writeBigEndianULong(ostream& out, ulong value) {
     return out;
 }
 
-
-
-//////////////////////////////
-//
-// BinUtils::writeLittleEndianLong --
-//
-
 ostream& BinUtils::writeLittleEndianLong(ostream& out, long value) {
     union { char bytes[4]; long l; } data;
     data.l = value;
@@ -288,14 +194,6 @@ ostream& BinUtils::writeLittleEndianLong(ostream& out, long value) {
     out << data.bytes[3];
     return out;
 }
-
-
-
-//////////////////////////////
-//
-// BinUtils::writeBigEndianLong --
-//
-
 ostream& BinUtils::writeBigEndianLong(ostream& out, long value) {
     union { char bytes[4]; long l; } data;
     data.l = value;
@@ -304,15 +202,7 @@ ostream& BinUtils::writeBigEndianLong(ostream& out, long value) {
     out << data.bytes[1];
     out << data.bytes[0];
     return out;
-
 }
-
-
-
-//////////////////////////////
-//
-// BinUtils::writeBigEndianFloat --
-//
 
 ostream& BinUtils::writeBigEndianFloat(ostream& out, float value) {
     union { char bytes[4]; float f; } data;
@@ -323,14 +213,6 @@ ostream& BinUtils::writeBigEndianFloat(ostream& out, float value) {
     out << data.bytes[0];
     return out;
 }
-
-
-
-//////////////////////////////
-//
-// BinUtils::writeLittleEndianFloat --
-//
-
 ostream& BinUtils::writeLittleEndianFloat(ostream& out, float value) {
     union { char bytes[4]; float f; } data;
     data.f = value;
@@ -340,13 +222,6 @@ ostream& BinUtils::writeLittleEndianFloat(ostream& out, float value) {
     out << data.bytes[3];
     return out;
 }
-
-
-
-//////////////////////////////
-//
-// BinUtils::writeBigEndianDouble --
-//
 
 ostream& BinUtils::writeBigEndianDouble(ostream& out, double value) {
     union { char bytes[8]; double d; } data;
@@ -361,14 +236,6 @@ ostream& BinUtils::writeBigEndianDouble(ostream& out, double value) {
     out << data.bytes[0];
     return out;
 }
-
-
-
-//////////////////////////////
-//
-// BinUtils::writeLittleEndianDouble --
-//
-
 ostream& BinUtils::writeLittleEndianDouble(ostream& out, double value) {
     union { char bytes[8]; double d; } data;
     data.d = value;
@@ -382,5 +249,3 @@ ostream& BinUtils::writeLittleEndianDouble(ostream& out, double value) {
     out << data.bytes[7];
     return out;
 }
-
-

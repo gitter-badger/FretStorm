@@ -31,7 +31,6 @@ int MidiTrack::read(istream& input, int& rwErrorFlag) {
         events.push_back(midiEvent);
         trackLength++;
     } while(!midiEvent->isEndOfTrack());
-    //cout << "end of track" << endl;
 
     return 0;
 }
@@ -53,7 +52,6 @@ int MidiTrack::readHeader(istream& input, int& rwErrorFlag) {
     trackChunkSize = (int) BinUtils::readLittleEndian4Bytes(input);
 
     return 0;
-
 }
 
 void MidiTrack::print() {
@@ -68,29 +66,7 @@ void MidiTrack::print() {
     for (int i = 0; i < trackLength; ++i) {
         events[i]->print();
     }
-
 }
-
-//////////////////////////////
-//
-// getTrackByteCount -- number of by the track after the track header.
-//    Might need to keep track of End-of-track meta message.
-//
-
-int MidiTrack::getTrackByteCount(int track) {
-    int sum = 0;
-    int i;
-    int eventcount = 0;//midifile.getEventCount(track);
-    MidiEvent event;
-
-    for (i=0; i<eventcount; i++) {
-       // event = midifile.getEvent(track, i);
-       // sum += getVlvSize(event.tick);
-       // sum += event.size();
-    }
-    return sum;
-}
-
 
 
 //////////////////////////////
@@ -110,10 +86,9 @@ int linkNotePairs(void) {
     // dimension 1: MIDI channel (0-15)
     // dimension 2: MIDI key     (0-127)  (but 0 not used for note-ons)
     // dimension 3: List of active note-ons or note-offs.
-    vector<vector<vector<MidiEvent*> > > noteons;
+    vector< vector< vector<MidiEvent*> > > noteons;
     noteons.resize(16);
-    int i;
-    for (i=0; i<noteons.size(); i++) {
+    for (int i = 0; i < noteons.size(); ++i) {
         noteons[i].resize(128);
     }
 
@@ -122,28 +97,29 @@ int linkNotePairs(void) {
     int channel;
     int key;
     int counter = 0;
-    MidiEvent* mev;
+    MidiEvent* midiEvent;
     MidiEvent* noteon;
-    for (i=0; i<getSize(); i++) {
-        mev = &getEvent(i);
-        mev->unlinkEvent();
-        if (mev->isNoteOn()) {
+
+    for (int i = 0; i < trackLength; ++i) {
+        midiEvent = events[i];
+        midiEvent->unlinkEvent();
+        if (midiEvent->) {
             // store the note-on to pair later with a note-off message.
-            key = mev->getKeyNumber();
-            channel = mev->getChannel();
-            noteons[channel][key].push_back(mev);
-        } else if (mev->isNoteOff()) {
-            key = mev->getKeyNumber();
-            channel = mev->getChannel();
+            key = midiEvent->getKeyNumber();
+            channel = midiEvent->getChannel();
+            noteons[channel][key].push_back(midiEvent);
+        } else if (midiEvent->isNoteOff()) {
+            key = midiEvent->getKeyNumber();
+            channel = midiEvent->getChannel();
             if (noteons[channel][key].size() > 0) {
                 noteon = noteons[channel][key].back();
                 noteons[channel][key].pop_back();
-                noteon->linkEvent(mev);
+                noteon->linkEvent(midiEvent);
                 counter++;
             }
         }
     }
     return counter;
-   */
+*/
     return 0;
 }

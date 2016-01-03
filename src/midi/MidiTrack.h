@@ -16,12 +16,13 @@ class MidiFile;
 class MidiTrack {
 public:
     MidiTrack(MidiFile& file);
-    void    print();
-    int     getTrackByteCount(int track);
+    int     getTrackByteCount       (int track);
     int     read                    (istream& input, int& rwErrorFlag);
     int     readHeader              (istream& input, int& rwErrorFlag);
-    void    simpleSearchForTitle();
-    void    initEvents();
+
+    void    linkNotePairs           (void);
+
+    void    print                   (void);
 
 protected:
     MidiFile& midiFileRef;
