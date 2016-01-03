@@ -7,9 +7,14 @@
 using namespace std;
 
 
-MidiEvent::MidiEvent() { }
+MidiEvent::MidiEvent()
+:   eventByteLength(0),
+    deltaTicks(0),
+    tick(0),
+    seconds(0){ }
 
-MidiEvent::MidiEvent(MidiFile&, MidiTrack&) { }
+MidiEvent::MidiEvent(MidiFile&, MidiTrack&)
+: MidiEvent() { }
 
 
 int MidiEvent::read(istream& input, int& rwErrorFlag, const MidiEvent* lastEvent) {
